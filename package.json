@@ -1,0 +1,28 @@
+{
+  "name": "mathlive-renderer-thanks-to-darwis",
+  "version": "1.0",
+  "description": "",
+  "main": "dist/index.html",
+  "targets": {
+    "main": false
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "parcel build --no-source-maps src/index.html --public-url ./"
+  },
+  "keywords": [],
+  "author": "hkgnp",
+  "license": "MIT",
+  "dependencies": {
+    "@logseq/libs": "0.0.1-alpha.30",
+    "mathlive": "^0.69.8"
+  },
+  "logseq": {
+    "id": "MathLive renderer credits to Darwis",
+    "title": "MathLive renderer credits to Darwis",
+    "icon": ""
+  },
+  "devDependencies": {
+    "parcel": "^2.0.1"
+  }
+}
