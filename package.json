@@ -1,6 +1,6 @@
 {
-  "name": "mathlive-renderer-thanks-to-darwis",
-  "version": "1.0",
+  "name": "darwis-mathlive-plugin",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/index.html",
   "targets": {
@@ -14,13 +14,13 @@
   "author": "hkgnp",
   "license": "MIT",
   "dependencies": {
-    "@logseq/libs": "0.0.1-alpha.30",
+    "@logseq/libs": "^0.0.1-alpha.34",
     "mathlive": "^0.69.8"
   },
   "logseq": {
-    "id": "MathLive renderer credits to Darwis",
-    "title": "MathLive renderer credits to Darwis",
-    "icon": ""
+    "id": "darwis-mathlive-plugin",
+    "title": "darwis-mathlive-plugin",
+    "icon": "./icon.svg"
   },
   "devDependencies": {
     "parcel": "^2.0.1"

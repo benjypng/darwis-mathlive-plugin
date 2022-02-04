@@ -1,6 +1,5 @@
+import { BlockIdentity } from '@logseq/libs/dist/LSPlugin.user';
 import 'mathlive';
-// import 'mathlive/dist/mathlive-static.css';
-// import 'mathlive/dist/mathlive-fonts.css';
 
 declare global {
   interface Window {
@@ -8,39 +7,66 @@ declare global {
   }
 }
 
-const HTMLDivEl: typeof HTMLDivElement = top?.HTMLDivElement;
+export const renderMathLive = (
+  uniqueIdentifier: string,
+  uuid: BlockIdentity
+) => {
+  const HTMLDivEl: typeof HTMLDivElement = top?.HTMLDivElement;
 
-const NAME = 'math-live';
+  const NAME = `mathlivesave-${uniqueIdentifier}`;
 
-class MathLive extends HTMLDivEl {
-  constructor() {
-    super();
+  class MathLive extends HTMLDivEl {
+    constructor() {
+      super();
+    }
+
+    static get observedAttributes() {
+      return ['data-latex', 'data-uuid'];
+    }
+
+    connectedCallback() {
+      this.render();
+
+      window.setTimeout(() => {
+        top?.document.addEventListener('mousedown', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        });
+
+        top?.document
+          .getElementById('formula')
+          .addEventListener('input', (ev) => {
+            //@ts-expect-error
+            console.log(ev.target.value);
+
+            //@ts-expect-error
+            logseq.Editor.upsertBlockProperty(uuid, 'output', ev.target.value);
+          });
+      }, 500);
+    }
+
+    async render() {
+      const output = await logseq.Editor.getBlockProperty(uuid, 'output');
+
+      this.innerHTML = `<math-field id="formula" virtual-keyboard-mode=manual style="
+      font-size: 22px; 
+      border-radius: 8px;
+      padding: 0 0 20px 20px;
+      border: 2px solid rgba(0, 0, 0, .3); 
+      box-shadow: 0 0 15px rgba(0, 0, 0, .2);">${
+        output ? output : ''
+      }</math-field>`;
+    }
+
+    get uuid() {
+      return (
+        this.getAttribute('data-uuid') ||
+        this.closest('div[id^="block-content"]')?.getAttribute('blockid') ||
+        ''
+      );
+    }
   }
 
-  static get observedAttributes() {
-    return ['data-latex', 'data-uuid'];
-  }
-
-  connectedCallback() {
-    this.render();
-  }
-
-  render() {
-    this.innerHTML = `<math-field id="formula" virtual-keyboard-mode=manual>
-        x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}
-    </math-field>`;
-  }
-
-  get uuid() {
-    return (
-      this.getAttribute('data-uuid') ||
-      this.closest('div[id^="block-content"]')?.getAttribute('blockid') ||
-      ''
-    );
-  }
-}
-
-export const registerMathLive = () => {
   if (!top?.customElements.get(NAME)) {
     top?.customElements.define(NAME, MathLive, {
       extends: 'div',
@@ -51,7 +77,6 @@ export const registerMathLive = () => {
       'src',
       'https://unpkg.com/mathlive/dist/mathlive.min.js'
     );
-    //@ts-expect-error
     top?.document.body.appendChild(script);
   }
 };
