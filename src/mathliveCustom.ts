@@ -35,9 +35,20 @@ export const renderMathLive = (
 
         top?.document
           .getElementById('formula')
-          .addEventListener('input', (ev) => {
-            //@ts-expect-error
-            logseq.Editor.upsertBlockProperty(uuid, 'output', ev.target.value);
+          .addEventListener('input', async (ev) => {
+            await logseq.Editor.exitEditingMode();
+            await logseq.Editor.upsertBlockProperty(
+              uuid,
+              'output',
+              //@ts-expect-error
+              ev.target.value
+            );
+          });
+
+        top?.document
+          .getElementById('formula')
+          .addEventListener('change', async () => {
+            await logseq.Editor.restoreEditingCursor();
           });
       }, 500);
     }
@@ -45,7 +56,7 @@ export const renderMathLive = (
     async render() {
       const output = await logseq.Editor.getBlockProperty(uuid, 'output');
 
-      this.innerHTML = `<math-field id="formula" virtual-keyboard-mode=manual style="
+      this.innerHTML = `<math-field tabindex="-1" id="formula" virtual-keyboard-mode=manual style="
       font-size: 22px; 
       border-radius: 8px;
       padding: 0 0 20px 20px;
