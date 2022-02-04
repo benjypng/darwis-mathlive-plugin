@@ -28,10 +28,20 @@ export const renderMathLive = (
       this.render();
 
       window.setTimeout(() => {
-        top?.document.addEventListener('mousedown', (e) => {
-          e.stopPropagation();
-          e.preventDefault();
-        });
+        top?.document
+          .getElementById('container')
+          .addEventListener('mousedown', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          });
+
+        top?.document
+          .getElementById('container')
+          .addEventListener('keypress', (e) => {
+            if (e.key === 't') {
+              e.stopPropagation();
+            }
+          });
 
         top?.document
           .getElementById('formula')
@@ -56,14 +66,14 @@ export const renderMathLive = (
     async render() {
       const output = await logseq.Editor.getBlockProperty(uuid, 'output');
 
-      this.innerHTML = `<math-field tabindex="-1" id="formula" virtual-keyboard-mode=manual style="
+      this.innerHTML = `<div id="container"><math-field tabindex="-1" id="formula" virtual-keyboard-mode=manual style="
       font-size: 22px; 
       border-radius: 8px;
       padding: 0 0 20px 20px;
       border: 2px solid rgba(0, 0, 0, .3); 
       box-shadow: 0 0 15px rgba(0, 0, 0, .2);">${
         output ? output : ''
-      }</math-field>`;
+      }</math-field></div>`;
     }
 
     get uuid() {
