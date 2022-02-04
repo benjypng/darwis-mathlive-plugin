@@ -37,9 +37,6 @@ export const renderMathLive = (
           .getElementById('formula')
           .addEventListener('input', (ev) => {
             //@ts-expect-error
-            console.log(ev.target.value);
-
-            //@ts-expect-error
             logseq.Editor.upsertBlockProperty(uuid, 'output', ev.target.value);
           });
       }, 500);
