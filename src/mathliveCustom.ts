@@ -30,23 +30,15 @@ export const renderMathLive = (
       window.setTimeout(() => {
         top?.document
           .getElementById('container')
-          .addEventListener('mousedown', (e) => {
+          .addEventListener('mousedown', async (e) => {
             e.stopPropagation();
             e.preventDefault();
-          });
-
-        top?.document
-          .getElementById('container')
-          .addEventListener('keypress', (e) => {
-            if (e.key === 't') {
-              e.stopPropagation();
-            }
+            await logseq.Editor.restoreEditingCursor();
           });
 
         top?.document
           .getElementById('formula')
           .addEventListener('input', async (ev) => {
-            await logseq.Editor.exitEditingMode();
             await logseq.Editor.upsertBlockProperty(
               uuid,
               'output',
