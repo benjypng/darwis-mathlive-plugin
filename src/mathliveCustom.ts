@@ -27,38 +27,30 @@ export const renderMathLive = (
     connectedCallback() {
       this.render();
 
-      window.setTimeout(() => {
-        top?.document
-          .getElementById('container')
-          .addEventListener('mousedown', async (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            await logseq.Editor.restoreEditingCursor();
-          });
+      window.setTimeout(async () => {
+        const formulaDiv = top?.document.getElementById(
+          `formula-${uniqueIdentifier}`
+        );
 
-        top?.document
-          .getElementById('formula')
-          .addEventListener('input', async (ev) => {
-            await logseq.Editor.upsertBlockProperty(
-              uuid,
-              'output',
-              //@ts-expect-error
-              ev.target.value
-            );
-          });
+        formulaDiv.addEventListener('input', async (ev) => {
+          await logseq.Editor.upsertBlockProperty(
+            uuid,
+            'output',
+            //@ts-expect-error
+            ev.target.value
+          );
+        });
 
-        top?.document
-          .getElementById('formula')
-          .addEventListener('change', async () => {
-            await logseq.Editor.restoreEditingCursor();
-          });
+        formulaDiv.addEventListener('change', async () => {
+          await logseq.Editor.restoreEditingCursor();
+        });
       }, 500);
     }
 
     async render() {
       const output = await logseq.Editor.getBlockProperty(uuid, 'output');
 
-      this.innerHTML = `<div id="container"><math-field tabindex="-1" id="formula" virtual-keyboard-mode=manual style="
+      this.innerHTML = `<div id="container-${uniqueIdentifier}"><math-field tabindex="1" id="formula-${uniqueIdentifier}" virtual-keyboard-mode=manual style="
       font-size: 22px; 
       border-radius: 8px;
       padding: 0 0 20px 20px;
