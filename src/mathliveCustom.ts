@@ -50,14 +50,20 @@ export const renderMathLive = (
     async render() {
       const output = await logseq.Editor.getBlockProperty(uuid, 'output');
 
-      this.innerHTML = `<div id="container-${uniqueIdentifier}"><math-field tabindex="1" id="formula-${uniqueIdentifier}" virtual-keyboard-mode=manual style="
+      this.innerHTML = `<div style="display:flex; flex-direction:column;"><div id="container-${uniqueIdentifier}"><math-field tabindex="1" id="formula-${uniqueIdentifier}" virtual-keyboard-mode=manual style="
       font-size: 22px; 
       border-radius: 8px;
       padding: 0 0 20px 20px;
-      border: 2px solid rgba(0, 0, 0, .3); 
+      border: 2px solid rgba(0, 0, 0, .3); margin: 0px;
       box-shadow: 0 0 15px rgba(0, 0, 0, .2);">${
         output ? output : ''
-      }</math-field></div>`;
+      }</math-field></div>
+      <div><button class="convertBtn" style="width: 100%; border: 1px solid black; border-radius: 8px;" data-on-click="convert">Convert to Latex (irreversible)</button></div></div>`;
+
+      this.querySelector('.convertBtn').addEventListener('click', async (e) => {
+        const getFormula = await logseq.Editor.getBlockProperty(uuid, 'output');
+        await logseq.Editor.updateBlock(uuid, `$$${getFormula}$$`);
+      });
     }
 
     get uuid() {

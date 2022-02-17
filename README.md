@@ -14,6 +14,12 @@ Incorporation of MathLive into Logseq.
 
 After restarting Logseq, trigger the plugin by typing `/MathLive`. A dialogue box will appear to let you enter your Mathematical functions. An output property will also be created to store the math values so that the block is able to persist the typed equation.
 
+## Converting to Latex
+
+When you are done drafting your formula, you can convert it to Latex so that it is more "permanent". This means that when you export your page, you will be able to see the Latex formula.
+
+![](/screenshots/convert.gif)
+
 # Credits
 
 Darwis from Discord for this implementation.
