@@ -7,15 +7,14 @@
     "main": false
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "parcel build --no-source-maps src/index.html --public-url ./"
+    "build": "rm -R dist && echo 'dist folder removed' ; parcel build --no-source-maps src/index.html --public-url ./"
   },
   "keywords": [],
   "author": "hkgnp",
   "license": "MIT",
   "dependencies": {
-    "@logseq/libs": "^0.0.10",
-    "mathlive": "^0.69.8"
+    "@logseq/libs": "^0.0.14",
+    "mathlive": "^0.91.2"
   },
   "logseq": {
     "id": "darwis-mathlive-plugin",
@@ -23,6 +22,6 @@
     "icon": "./icon.svg"
   },
   "devDependencies": {
-    "parcel": "^2.7.0"
+    "parcel": "^2.8.3"
   }
 }
