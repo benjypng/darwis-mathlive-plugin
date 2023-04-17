@@ -60,12 +60,7 @@ export default function renderMathLive(id: string) {
     async render() {
       const output = await logseq.Editor.getBlockProperty(this.uuid, "output");
 
-      this.innerHTML = `<div style="display:flex; flex-direction:column;"><div id="container-${id}"><math-field id="formula-${id}" style="
-      font-size: 22px;
-      border-radius: 8px;
-      padding: 0 0 20px 20px;
-      border: 2px solid rgba(0, 0, 0, .3); margin: 0px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, .2);">${
+      this.innerHTML = `<div style="display:flex; flex-direction:column;"><div id="container-${id}"><math-field id="formula-${id}" class="mathlive">${
         output ? output : ""
       }</math-field></div>
       <div><button class="convertBtn" style="width: 100%; border: 1px solid black; border-radius: 8px;" data-on-click="convert">Convert to Latex (irreversible)</button></div></div>`;
