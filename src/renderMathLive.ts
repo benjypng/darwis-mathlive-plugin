@@ -1,4 +1,5 @@
 import "mathlive";
+import { debounce } from "rambdax";
 
 declare global {
   interface Window {
@@ -47,13 +48,16 @@ export default function renderMathLive(id: string) {
       window.setTimeout(async () => {
         const formulaDiv = top?.document.getElementById(`formula-${id}`);
 
-        formulaDiv!.addEventListener("input", async (e) => {
-          await logseq.Editor.upsertBlockProperty(
-            this.uuid,
-            "output",
-            (e.target as HTMLInputElement).value
-          );
-        });
+        formulaDiv!.addEventListener(
+          "input",
+          debounce(async (e) => {
+            await logseq.Editor.upsertBlockProperty(
+              this.uuid,
+              "output",
+              (e.target as HTMLInputElement).value
+            );
+          }, 500)
+        );
 
         formulaDiv!.addEventListener("change", async () => {
           await logseq.Editor.restoreEditingCursor();

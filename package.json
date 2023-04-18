@@ -7,14 +7,15 @@
     "main": false
   },
   "scripts": {
-    "build": "rm -R dist && echo 'dist folder removed' ; parcel build --no-source-maps src/index.html --public-url ./ ; cp node_modules/mathlive/dist/mathlive.min.js dist/"
+    "build": "rm -R dist && echo 'dist folder removed' ; parcel build --no-source-maps src/index.html --public-url ./ ; cp -rf node_modules/mathlive/dist/* dist/"
   },
   "keywords": [],
   "author": "hkgnp",
   "license": "MIT",
   "dependencies": {
     "@logseq/libs": "^0.0.14",
-    "mathlive": "^0.91.2"
+    "mathlive": "^0.91.2",
+    "rambdax": "^9.1.0"
   },
   "logseq": {
     "id": "darwis-mathlive-plugin",
