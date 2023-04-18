@@ -15,7 +15,7 @@ function main() {
 			margin: 0px;
 			box-shadow: 0 0 15px rgba(0, 0, 0, .2);
 		}
-											`);
+	`);
 
   // Generate unique identifier
   const uniqueIdentifier = () =>
