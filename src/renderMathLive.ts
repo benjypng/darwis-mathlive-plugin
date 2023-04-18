@@ -13,10 +13,10 @@ export default function renderMathLive(id: string) {
     constructor() {
       super();
       logseq.provideStyle(`
-													#block-content-${this.uuid} .block-properties {
-														display: none !important;
-													}
-													`);
+        #block-content-${this.uuid} .block-properties {
+          display: none !important;
+        }
+      `);
     }
 
     static get observedAttributes() {
@@ -36,6 +36,10 @@ export default function renderMathLive(id: string) {
       this.addEventListener("mousedown", function (e: any) {
         e.stopPropagation();
         e.preventDefault();
+      });
+      // Set event listener to prevent keythrough on div
+      this.addEventListener("keydown", function (e: any) {
+        e.stopPropagation();
       });
 
       this.render();
@@ -80,10 +84,7 @@ export default function renderMathLive(id: string) {
       extends: "div",
     });
     const script = top?.document.createElement("script");
-    script?.setAttribute(
-      "src",
-      "https://unpkg.com/mathlive/dist/mathlive.min.js"
-    );
+    script?.setAttribute("src", `${logseq.baseInfo.lsr}dist/mathlive.min.js`);
     top?.document.body.appendChild(script as HTMLScriptElement);
   }
 }
