@@ -1423,6 +1423,11 @@ process@^0.11.1:
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
   integrity sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==
 
+rambdax@^9.1.0:
+  version "9.1.0"
+  resolved "https://registry.npmmirror.com/rambdax/-/rambdax-9.1.0.tgz#8f5f97b275a276a441a3617099fc39f49488d236"
+  integrity sha512-yrKLNN+/MypBJ87+Y3BQVS0yGh7a4aU4mpLwO0xB+va82gYbgzFjKoVUUoFyWEIZ1vR9b9fd7zrClxy4LHSFhA==
+
 react-error-overlay@6.0.9:
   version "6.0.9"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.9.tgz#3c743010c9359608c375ecd6bc76f35d93995b0a"
