@@ -1,6 +1,5 @@
 import "@logseq/libs";
-
-import renderMathLive from "./renderMathLive";
+import { renderMathLive } from "./renderMathLive";
 
 function main() {
   console.log("darwis-mathlive-plugin loaded");
@@ -15,26 +14,25 @@ function main() {
 			margin: 0px;
 			box-shadow: 0 0 15px rgba(0, 0, 0, .2);
 		}
+
+    .convertBtn {
+      width: 100%;
+      border: 1px solid black;
+      border-radius: 8px;
+    }
 	`);
 
-  // Generate unique identifier
-  const uniqueIdentifier = () =>
-    Math.random()
-      .toString(36)
-      .replace(/[^a-z]+/g, "");
-
-  logseq.Editor.registerSlashCommand("MathLive", async () => {
-    const id = uniqueIdentifier();
+  logseq.Editor.registerSlashCommand("MathLive", async (e) => {
     await logseq.Editor
-      .insertAtEditingCursor(`{{renderer :mathlive_${id}}}[:div {:is "mathlive-${id}"}]
+      .insertAtEditingCursor(`{{renderer :mathlive_${e.uuid}}}[:div {:is "mathlive-${e.uuid}"}]
 `);
   });
 
   logseq.App.onMacroRendererSlotted(async ({ payload }) => {
     const [type] = payload.arguments;
+    if (!type) return;
     if (!type.startsWith(":mathlive_")) return;
-    const id = type.split("_")[1]?.trim();
-    renderMathLive(id);
+    renderMathLive(payload.uuid);
   });
 }
 

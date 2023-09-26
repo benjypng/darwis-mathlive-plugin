@@ -1,4 +1,5 @@
 import "mathlive";
+import { MathfieldElement } from "mathlive";
 import { debounce } from "rambdax";
 
 declare global {
@@ -7,29 +8,18 @@ declare global {
   }
 }
 
-export default function renderMathLive(id: string) {
+export const renderMathLive = (id: string) => {
   const HTMLDivEl: typeof HTMLDivElement = top?.HTMLDivElement;
 
   class MathLive extends HTMLDivEl {
     constructor() {
       super();
+      // hide block property used to store mathlive value
       logseq.provideStyle(`
-        #block-content-${this.uuid} .block-properties {
+        #block-content-${id} .block-properties {
           display: none !important;
         }
       `);
-    }
-
-    static get observedAttributes() {
-      return ["data-latex", "data-uuid"];
-    }
-
-    get uuid() {
-      return (
-        this.getAttribute("data-uuid") ||
-        this.closest('div[id^="block-content"]')?.getAttribute("blockid") ||
-        ""
-      );
     }
 
     connectedCallback() {
@@ -41,44 +31,58 @@ export default function renderMathLive(id: string) {
       // Set event listener to prevent keythrough on div
       this.addEventListener("keydown", function (e: any) {
         e.stopPropagation();
+        e.preventDefault();
       });
 
       this.render();
 
       window.setTimeout(async () => {
-        const formulaDiv = top?.document.getElementById(`formula-${id}`);
+        const formulaDiv = top?.document.getElementById(
+          `formula-${id}`,
+        ) as MathfieldElement;
+        if (!formulaDiv) return;
 
-        formulaDiv!.addEventListener(
+        formulaDiv.addEventListener(
           "input",
           debounce(async (e) => {
             await logseq.Editor.upsertBlockProperty(
-              this.uuid,
+              id,
               "output",
-              (e.target as HTMLInputElement).value
+              (e.target as HTMLInputElement).value,
             );
-          }, 500)
+          }, 500),
         );
-
-        formulaDiv!.addEventListener("change", async () => {
+        formulaDiv.addEventListener("change", async () => {
           await logseq.Editor.restoreEditingCursor();
         });
+
+        formulaDiv.inlineShortcuts = {
+          ...formulaDiv!.inlineShortcuts,
+          sqrt: "\\sqrt{x}",
+        };
       }, 500);
     }
 
     async render() {
-      const output = await logseq.Editor.getBlockProperty(this.uuid, "output");
+      // var to store the values created by mathlive
+      const output = await logseq.Editor.getBlockProperty(id, "output");
 
-      this.innerHTML = `<div style="display:flex; flex-direction:column;"><div id="container-${id}"><math-field id="formula-${id}" class="mathlive">${
-        output ? output : ""
-      }</math-field></div>
-      <div><button class="convertBtn" style="width: 100%; border: 1px solid black; border-radius: 8px;" data-on-click="convert">Convert to Latex (irreversible)</button></div></div>`;
+      this.innerHTML = `
+          <div>
+            <div id="container-${id}">
+              <math-field id="formula-${id}">${output ?? ""}</math-field>
+            </div>
+            <div>
+              <button class="convertBtn" data-on-click="convert">
+                Convert to Latex (irreversible)
+              </button>
+            </div>
+          </div>
+			`;
 
       this.querySelector(".convertBtn")!.addEventListener("click", async () => {
-        const getFormula = await logseq.Editor.getBlockProperty(
-          this.uuid,
-          "output"
-        );
-        await logseq.Editor.updateBlock(this.uuid, `$$${getFormula}$$`);
+        const getFormula = await logseq.Editor.getBlockProperty(id, "output");
+        await logseq.Editor.updateBlock(id, `$$${getFormula}$$`);
       });
     }
   }
@@ -91,4 +95,4 @@ export default function renderMathLive(id: string) {
     script?.setAttribute("src", `${logseq.baseInfo.lsr}dist/mathlive.min.js`);
     top?.document.body.appendChild(script as HTMLScriptElement);
   }
-}
+};
