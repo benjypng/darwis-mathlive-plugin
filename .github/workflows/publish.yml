@@ -24,7 +24,7 @@ jobs:
       - name: Build
         id: build
         run: |
-          npm ci && npm run build
+          pnpm i && pnpm run build
           mkdir ${{ env.PLUGIN_NAME }}
           cp README.md package.json icon.svg ${{ env.PLUGIN_NAME }}
           mv dist ${{ env.PLUGIN_NAME }}
